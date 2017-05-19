@@ -54,7 +54,7 @@
     "rimraf": "2.5.4",
     "shortid": "^2.2.4",
     "soajs": "1.0.*",
-    "soajs.analytics": "soajs/soajs.analytics.git#feature/alpha",
+    "soajs.analytics": "soajs/soajs.analytics.git#feature/AN-81",
     "unzip2": "0.2.5",
     "yamljs": "0.2.8"
   }
