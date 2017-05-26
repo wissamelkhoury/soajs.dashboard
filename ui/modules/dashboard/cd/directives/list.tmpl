@@ -1,0 +1,159 @@
+<style>
+	.configCd .form-control {
+		display: inline;
+		width: auto;
+		height: auto;
+		padding-bottom: 3px;
+		padding-top: 4px;
+	}
+
+	.configCd .entryServiceBoxes {
+		margin-top: 10px;
+	}
+
+	.configCd label,
+	.configCd .entryServiceBoxes .service-container label {
+		font-weight: bold;
+		width: 75px;
+		padding-bottom: 2px;
+	}
+
+	.configCd label.version {
+		margin-bottom: 3px;
+	}
+
+	.configCd select.form-control {
+		margin-top: 3px;
+		margin-bottom: 5px;
+		min-width: 120px;
+	}
+</style>
+<section ng-controller="cdAppCtrl">
+	<tabset class="">
+		<tab heading="Configuration" ng-click="getRecipe()">
+			<br>
+			<div class="configCd">
+				<div ng-show="myEnv==='DASHBOARD'">
+					<alert type="info">
+						The Dashboard environment is auto-configured to listen on branch master for all services deployed in it.<br />
+						The default Continuous Deployment Strategy is also set to notify.<br />
+						All code updates are record in the ledger; please check the ledger for further details on how to handle these updates.
+					</alert>
+				</div>
+				<div>
+					<label>Branch:</label>
+					<select ng-disabled="myEnv==='DASHBOARD'" data-ng-model="configuration.branch" class="form-control">
+						<option ng-repeat="branch in branches" value="{{branch}}">{{branch}}</option>
+					</select>
+				</div>
+				<div>
+					<label>Strategy:</label>
+					<select ng-disabled="myEnv==='DASHBOARD'" data-ng-model="configuration.strategy" class="form-control">
+						<option value="notify">notify</option>
+						<option value="update">update</option>
+					</select>
+				</div>
+				<div ng-hide="myEnv==='DASHBOARD'" class="entryServiceBoxes ng-scope">
+					<div ng-show="servicesNumber.length ===0">
+						You do not have any services deployed yet.
+					</div>
+					<div class="clearfix service-container" ng-repeat="(name, service) in objServices">
+						<div class="clearfix serviceNameHead">
+							<input ng-model="configuration[name].include" ng-click="assignService(name)" type="checkbox">
+							{{name}}
+						</div>
+						<div>
+							<div ng-show="configuration[name].include" class="body listApis openApis">
+								<div>
+									<label>Branch:</label> {{objServices[name].versions[0].branch}}
+								</div>
+								<div>
+									<label>Strategy:</label>
+									<select class="form-control" data-ng-model="configuration[name].strategy">
+										<option value="notify">notify</option>
+										<option value="update">update</option>
+									</select>
+								</div>
+								<div ng-if="1 < objServices[name].versions.length" style="padding-left: 10px;">
+									<div ng-repeat="version in objServices[name].versions">
+
+										<input ng-click="setVersion(name,version)" ng-model="configuration[name][version.versionLabel].include" type="checkbox">
+										<label class="version">Version:</label> {{version.versionLabel}}
+										<div style="padding-left: 17px;">
+											<div>
+												<label class="">Branch:</label> {{version.branch}}
+											</div>
+											<div>
+												<label class="">Strategy:</label>
+												<select class="form-control" data-ng-model="configuration[name][version.versionLabel].strategy">
+													<option value="notify">notify</option>
+													<option value="update">update</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div ng-hide="myEnv==='DASHBOARD'" style="float: right">
+					<input class="btn btn-sm btn-primary" ng-click="saveUpdate()" value="Update Continuous Delivery Settings" type="submit">
+				</div>
+			</div>
+
+		</tab>
+		<tab heading="ledger {{updateCount}}" ng-click="getLedger()">
+			<br/>
+			<input ng-show="ledger && ledger.length > 0" type="button" class="btn btn-sm btn-primary" ng-confirm-click="Clicking this button means you have read all the ledger entries. Are you sure you want to proceed?" ng-click="readAll()" value="Mark All as Read"/>
+			<div class="grid" ng-show="ledger && ledger.length > 0">
+				<div class="table">
+					<div ng-repeat="oneEntry in ledger" ng-class="{'first': $first, 'last': $last, 'notread' : !oneEntry.read }" ng-class-odd="'odd'" ng-class-even="'even'" class="row w100 c-both">
+						<div class="f-left mt-5">
+							<a href="" ng-click="readOne(oneEntry)" tooltip="Mark as Read" class="mr-10">
+								<span class="icon icon-drawer2"></span>
+							</a>
+							<span ng-if="oneEntry.update">
+								Service <b>{{oneEntry.serviceName}}</b><b ng-if="oneEntry.serviceVersion">/Version{{oneEntry.serviceVersion}}</b> in Environment <b>{{oneEntry.env}}</b> was automatically update on <em>{{oneEntry.ts|fulldate}}</em> based on Continuous Delivery Strategy
+							</span>
+							
+							<span ng-if="oneEntry.notify && !oneEntry.manual">
+								New Update Received for service <b>{{oneEntry.serviceName}}</b><b ng-if="oneEntry.serviceVersion">/Version{{oneEntry.serviceVersion}}</b> in Environment <b>{{oneEntry.env}}</b> on <em>{{oneEntry.ts|fulldate}}</em> based on Continuous Delivery Strategy
+							</span>
+							
+							<span ng-if="oneEntry.manual">
+								Catalog was manually rebuilt for service <b>{{oneEntry.serviceName}}</b><b ng-if="oneEntry.serviceVersion">/Version{{oneEntry.serviceVersion}}</b> in Environment <b>{{oneEntry.env}}</b> on <em>{{oneEntry.ts|fulldate}}</em> by the administrator
+							</span>
+							
+							<span ng-if="oneEntry.rebuild">
+								Service <b>{{oneEntry.serviceName}}</b><b ng-if="oneEntry.serviceVersion">/Version{{oneEntry.serviceVersion}}</b> in Environment <b>{{oneEntry.env}}</b> was manually rebuilt on <em>{{oneEntry.ts|fulldate}}</em> by the administrator
+							</span>
+						</div>
+						<div ng-if="oneEntry.notify && !oneEntry.manual && !oneEntry.oldTs" class="f-right">
+							<div ng-show="oneEntry.image.prefix === 'soajsorg'">
+								<div ng-show="oneEntry.rms">
+									<a class="btn btn-sm btn-default" href="{{upgradeSpaceLink}}" target="_blank">Learn
+										More</a>
+								</div>
+								<div ng-show="!oneEntry.rms">
+									<a class="btn btn-sm btn-default" href="" ng-click="updateEntry(oneEntry, 'redeploy');"><span class="icon icon-loop2"></span>&nbsp;Redeploy
+										Service</a>
+								</div>
+							</div>
+							<div ng-show="oneEntry.image.prefix !== 'soajsorg'" class="dropdown serviceOpsDropdown">
+								<a class="btn btn-sm btn-primary" href="" ng-click="updateEntry(oneEntry, 'redeploy');"><span class="icon icon-loop2"></span>&nbsp;Redeploy
+									Service</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div ng-show="!ledger || ledger.length === 0">
+				<alert type="info">
+					No Updates available at this moment.
+				</alert>
+			</div>
+		</tab>
+	</tabset>
+</section>
