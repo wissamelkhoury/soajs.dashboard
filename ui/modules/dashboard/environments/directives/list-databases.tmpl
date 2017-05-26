@@ -40,16 +40,16 @@
 	        </div>
 	    </li>
 	</ul>
-	<a ng-if="!dbs.config.session && access.dbs.add" ng-click="addDatabase(envCode,true)" class="btn btn-sm btn-primary">{{translation.addSessionDatabase[LANG]}}</a><br/><br/>
+	<a ng-if="!dbs.config.session && access.dbs.add" ng-click="addDatabase(envCode,dbs,true)" class="btn btn-sm btn-primary">{{translation.addSessionDatabase[LANG]}}</a><br/><br/>
 	<hr/>
-	<a ng-if="access.dbs.add" href="" ng-click="addDatabase(envCode,false)" class="btn btn-sm btn-primary">{{translation.addNewDatabase[LANG]}}</a><br/><br/>
+	<a ng-if="access.dbs.add" href="" ng-click="addDatabase(envCode,dbs,false)" class="btn btn-sm btn-primary">{{translation.addNewDatabase[LANG]}}</a><br/><br/>
 	<h3>Database List:</h3>
 	<div class="entryBoxes entryBoxesGrid">
 	    <div ng-repeat="(dbName, dbInfo) in dbs.databases track by dbName" class="dbBox">
 	        <div class="head">
 	            <h4>{{dbName}}</h4>
 	            <span class="rightActions">
-	                <a ng-if="access.dbs.update" href="" ng-click="editDatabase(envCode, dbName, dbInfo);">
+	                <a ng-if="access.dbs.update" href="" ng-click="editDatabase(envCode, dbName, dbInfo,dbs);">
 	                    <span class="icon icon-pencil" tooltip="{{translation.editDatabase[LANG]}}"></span>
 	                </a>
 	                <a ng-if="access.dbs.delete" href="" ng-confirm-click="{{translation.areYouSureYouWantRemoveSelectedDatabase[LANG]}}" ng-click="removeDatabase(envCode, dbName);">
@@ -59,7 +59,8 @@
 	        </div>
 	        <div class="info2">
 	            <b>Cluster:</b>&nbsp;{{dbInfo['cluster']}}<br/>
-	            <b>Tenant Specific:</b>&nbsp;{{dbInfo['tenantSpecific']}}
+	            <b>Tenant Specific:</b>&nbsp;{{dbInfo['tenantSpecific']}}<br/>
+	            <div ng-show="dbInfo['usedForAnalytics']"> <b >Used For Analytics:</b>&nbsp;{{dbInfo['usedForAnalytics']}}</div>
 	        </div>
 	    </div>
 	</div>

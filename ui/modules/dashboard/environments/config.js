@@ -172,15 +172,31 @@ var environmentsConfig = {
 				{
 					'name': 'cluster',
 					'label': translation.clusterName[LANG],
-					'type': 'text',
+					'type': 'select',
 					'placeholder': translation.cluster1[LANG],
-					'value': '',
+					'value': [],
 					'tooltip': translation.enterTheClusterName[LANG],
 					'required': true
 				},
 				{
 					'name': 'tenantSpecific',
 					'label': translation.tenantSpecific[LANG],
+					'type': 'radio',
+					'value': [
+						{
+							'v': false,
+							'l': "False"
+						},
+						{
+							'v': true,
+							'l': "True"
+						}
+					],
+					'required': false
+				},
+				{
+					'name': 'usedForAnalytics',
+					'label': translation.usedForAnalytics[LANG],
 					'type': 'radio',
 					'value': [
 						{

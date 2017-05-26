@@ -478,6 +478,10 @@ var translation = {
 		"ENG": "Tenant Specific",
 		"FRA": "Tenant Specific"
 	},
+	"usedForAnalytics": {
+		"ENG": "Used For Analytics",
+		"FRA": "Used For Analytics"
+	},
 	"created": {
 		"ENG": "Created",
 		"FRA": "Created"

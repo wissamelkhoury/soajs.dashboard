@@ -1547,3 +1547,11 @@ td.apiNavigationWide .pagination a {
     border-radius: 10px;
     border: solid 1px #ccc;
 }
+tr.form-group.tr-usedForAnalytics-wrapper  {
+    display: inline;
+    float: right;
+    width: 50%;
+}
+tr.form-group.tr-tenantSpecific-wrapper {
+    display: inline;
+}

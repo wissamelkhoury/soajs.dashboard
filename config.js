@@ -1229,6 +1229,11 @@ module.exports = {
 					"required": false,
 					"validation": {"type": "boolean", "required": true}
 				},
+				"usedForAnalytics": {
+					"source": ['body.usedForAnalytics'],
+					"required": false,
+					"validation": {"type": "boolean", "required": true}
+				},
 				"sessionInfo": {
 					"source": ['body.sessionInfo'],
 					"required": false,
@@ -2073,6 +2078,11 @@ module.exports = {
 				},
 				"tenantSpecific": {
 					"source": ['body.tenantSpecific'],
+					"required": false,
+					"validation": {"type": "boolean", "required": true}
+				},
+				"usedForAnalytics": {
+					"source": ['body.usedForAnalytics'],
 					"required": false,
 					"validation": {"type": "boolean", "required": true}
 				},

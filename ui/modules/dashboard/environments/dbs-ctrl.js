@@ -16,12 +16,12 @@ environmentsApp.controller('databaseCtrl', ['$scope','$cookies', 'envDB', functi
 		envDB.removeDatabase($scope, env, name);
 	};
 
-	$scope.addDatabase = function (env, session) {
-		envDB.addDatabase($scope, env, session);
+	$scope.addDatabase = function (env, dbs, session) {
+		envDB.addDatabase($scope, env, dbs, session);
 	};
 
-	$scope.editDatabase = function (env, name, data) {
-		envDB.editDatabase($scope, env, name, data);
+	$scope.editDatabase = function (env, name, data, dbs) {
+		envDB.editDatabase($scope, env, name, data, dbs);
 	};
 
 	$scope.updateDbPrefix = function (env, prefix) {

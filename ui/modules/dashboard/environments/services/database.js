@@ -44,11 +44,25 @@ dbServices.service('envDB', ['ngDataApi', '$timeout', '$modal', function (ngData
 			}
 		});
 	}
-
-	function addDatabase(currentScope, env, session) {
+	
+	function addDatabase(currentScope, env, dbs, session) {
+		var dataForm = angular.copy(environmentsConfig.form.database);
+		if (dbs.clusters && typeof dbs.clusters === "object" && Object.keys(dbs.clusters).length > 0) {
+			var form = (session) ? environmentsConfig.form.session :dataForm;
+			form.entries.forEach(function (oneEntry) {
+				if (oneEntry.name === "cluster") {
+					Object.keys(dbs.clusters).forEach(function (oneCluster) {
+						oneEntry.value.push({
+							l: oneCluster,
+							v: oneCluster
+						});
+					});
+				}
+			});
+		}
 		var options = {
 			timeout: $timeout,
-			form: (session) ? environmentsConfig.form.session : environmentsConfig.form.database,
+			form: form,
 			name: 'addDatabase',
 			label: 'Add New Database',
 			actions: [
@@ -61,6 +75,7 @@ dbServices.service('envDB', ['ngDataApi', '$timeout', '$modal', function (ngData
 							'name': formData.name,
 							'cluster': formData.cluster
 						};
+						
 						if (session) {
 							postData['name'] = 'session';
 							postData['sessionInfo'] = {
@@ -74,7 +89,7 @@ dbServices.service('envDB', ['ngDataApi', '$timeout', '$modal', function (ngData
 						else {
 							postData['tenantSpecific'] = formData.tenantSpecific;
 						}
-
+						postData['usedForAnalytics'] = formData.usedForAnalytics ? true : false;
 						getSendDataFromServer(currentScope, ngDataApi, {
 							"method": "post",
 							"routeName": "/dashboard/environment/dbs/add",
@@ -104,11 +119,10 @@ dbServices.service('envDB', ['ngDataApi', '$timeout', '$modal', function (ngData
 				}
 			]
 		};
-
 		buildFormWithModal(currentScope, $modal, options);
 	}
 
-	function editDatabase(currentScope, env, name, data) {
+	function editDatabase(currentScope, env, name, data, dbs) {
 		var formData, formConfig;
 		if (name === 'session') {
 			var t = angular.copy(data);
@@ -131,6 +145,19 @@ dbServices.service('envDB', ['ngDataApi', '$timeout', '$modal', function (ngData
 			formConfig.entries.forEach(function (oneEntry) {
 				if (oneEntry.name === 'name') {
 					oneEntry.type = 'readonly';
+				}
+			});
+		}
+		
+		if (dbs.clusters && typeof dbs.clusters === "object" && Object.keys(dbs.clusters).length > 0) {
+			formConfig.entries.forEach(function (oneEntry) {
+				if (oneEntry.name === "cluster") {
+					Object.keys(dbs.clusters).forEach(function (oneCluster) {
+						oneEntry.value.push({
+							l: oneCluster,
+							v: oneCluster
+						});
+					});
 				}
 			});
 		}
@@ -163,7 +190,7 @@ dbServices.service('envDB', ['ngDataApi', '$timeout', '$modal', function (ngData
 						else {
 							postData['tenantSpecific'] = formData.tenantSpecific;
 						}
-
+						postData['usedForAnalytics'] = formData.usedForAnalytics ? true : false;
 						getSendDataFromServer(currentScope, ngDataApi, {
 							"method": "put",
 							"routeName": "/dashboard/environment/dbs/update",
