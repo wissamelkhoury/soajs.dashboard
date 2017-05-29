@@ -261,7 +261,8 @@ var errors = {
 	"953": "Unable to delete catalog recipe",
 	"954": "Unable to get catalog ID for specified service/deployment",
 	
-	"960": "Elasticsearch analytics cluster not found"
+	"960": "Elasticsearch analytics cluster not found",
+	"961": "Invalid Elasticsearch analytics cluster"
 };
 
 

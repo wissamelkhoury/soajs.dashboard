@@ -5,6 +5,7 @@ function buildFormWithModal($scope, $modal, opts, cb) {
 	formConfig.actions = opts.actions;
 	formConfig.timeout = opts.timeout;
 	formConfig.msgs = opts.msgs;
+	formConfig.size = opts.size;
 	formConfig.buttonLabels = opts.buttonLabels;
 	formConfig.data = opts.data;
 	formConfig.ngDataApi = opts.ngDataApi;
@@ -26,7 +27,7 @@ function buildFormWithModal($scope, $modal, opts, cb) {
 		$scope.form.openForm = function () {
 			var newModal = $modal.open({
 				template: "<ngform></ngform>",
-				size: 'lg',
+				size: formConfig.size || 'lg',
 				backdropClass: "backdrop-soajs",
 				backdrop: formConfig.backdrop,
 				keyboard: false,

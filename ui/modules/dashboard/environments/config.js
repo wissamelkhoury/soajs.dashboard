@@ -776,6 +776,10 @@ var environmentsConfig = {
                     'hidden': true
                 },
 			]
+		},
+		localElastic: {
+			'entries': [
+			]
 		}
 	},
 	nginxRequiredCerts: {

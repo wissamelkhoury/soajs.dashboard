@@ -1871,6 +1871,20 @@ service.init(function () {
 	
 	/**
 	 * Analytics:
+	 * Api that deploys elasticsearch locally
+	 * @param {String} API route
+	 * @param {Function} API middleware
+	 */
+	service.get("/analytics/deployLocalElastic", function (req, res) {
+		initBLModel(req, res, analyticsBL, dbModel, function (BL) {
+			BL.deployLocalElastic(config, req, res, function (error, data) {
+				return res.json(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+	
+	/**
+	 * Analytics:
 	 * Api that deactivate analytics in an environment
 	 * @param {String} API route
 	 * @param {Function} API middleware

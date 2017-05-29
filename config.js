@@ -1146,6 +1146,20 @@ module.exports = {
 						"type": "string", "required": true
 					}
 				}
+			},
+			
+			"/analytics/deployLocalElastic": {
+				_apiInfo: {
+					"l": "Deploy Local Elasticsearch",
+					"group": "elk"
+				},
+				"env": {
+					"source": ['query.env'],
+					"required": true,
+					"validation": {
+						"type": "string", "required": true
+					}
+				}
 			}
 		},
 		

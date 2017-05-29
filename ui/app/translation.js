@@ -482,6 +482,14 @@ var translation = {
 		"ENG": "Used For Analytics",
 		"FRA": "Used For Analytics"
 	},
+	"deployLocalEs": {
+		"ENG": "Deploy Elasticsearch Locally",
+		"FRA": "Deploy Elasticsearch Locally"
+	},
+	"elasticSearchLocalMessage": {
+		"ENG": "No Elasticsearch database was found, Do you want to deploy Elasticsearch locally",
+		"FRA": "No Elasticsearch database was found, Do you want to deploy Elasticsearch locally"
+	},
 	"created": {
 		"ENG": "Created",
 		"FRA": "Created"

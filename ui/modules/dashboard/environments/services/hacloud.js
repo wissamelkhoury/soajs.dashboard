@@ -989,6 +989,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 
 	function activateAnalytics(currentScope) {
 		var env = currentScope.envCode.toLowerCase();
+		var dataForm = angular.copy(environmentsConfig.form.localElastic);
 		if (currentScope.access.analytics.activate) {
 			getSendDataFromServer(currentScope, ngDataApi, {
 				"method": "get",
@@ -998,7 +999,59 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				}
 			}, function (error) {
 				if (error) {
-					currentScope.displayAlert('danger', error);
+					if (error.code === 961){
+						var options = {
+							timeout: $timeout,
+							msgs: {
+								"header": translation.elasticSearchLocalMessage[LANG] + "?"
+							},
+							size: "dialog",
+							form: dataForm,
+							name: 'chooseLocal',
+							label: translation.deployLocalEs[LANG], // + ': ' + type,
+							actions: [
+								{
+									'type': 'submit',
+									'label': translation.deployLocalEs[LANG],
+									'btn': 'primary',
+									'action': function (formData) {
+										getSendDataFromServer(currentScope, ngDataApi, {
+											"method": "get",
+											"routeName": "/dashboard/analytics/deployLocalElastic",
+											"params": {
+												"env": env
+											}
+										}, function (error) {
+											if (error) {
+												currentScope.displayAlert('danger', error);
+												currentScope.modalInstance.close();
+												currentScope.form.formData = {};
+											}
+											else {
+												currentScope.$parent.displayAlert('info', "Local Elasticsearch is being deployed");
+												currentScope.modalInstance.close();
+												currentScope.form.formData = {};
+											}
+										});
+										
+									}
+								},
+								{
+									'type': 'reset',
+									'label': translation.cancel[LANG],
+									'btn': 'danger',
+									'action': function () {
+										currentScope.modalInstance.dismiss('cancel');
+										currentScope.form.formData = {};
+									}
+								}
+							]
+						};
+						buildFormWithModal(currentScope, $modal, options);
+					}
+					else {
+						currentScope.displayAlert('danger', error);
+					}
 				}
 				else {
 					currentScope.displayAlert('info', "Analytics is being Deployed, it may take a few minutes.");
