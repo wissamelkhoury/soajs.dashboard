@@ -11,7 +11,8 @@ cdApp.controller('cdAppCtrl', ['$scope', '$timeout', '$modal', '$cookies', 'ngDa
 	$scope.myEnv = $cookies.getObject('myEnv').code;
 	$scope.upgradeSpaceLink = cdAppConfig.upgradeSpaceLink;
 	$scope.updateCount;
-	
+	$scope.servicesNumber=[];
+
 	$scope.getRecipe = function () {
 
 		overlayLoading.show();
@@ -20,6 +21,10 @@ cdApp.controller('cdAppCtrl', ['$scope', '$timeout', '$modal', '$cookies', 'ngDa
 			routeName: '/dashboard/cd'
 		}, function (error, response) {
 			overlayLoading.hide();
+			if (error) {
+				$scope.displayAlert('danger', error.message);
+			}
+
 			if(!response) {
 				response = {};
 			}
@@ -33,19 +38,14 @@ cdApp.controller('cdAppCtrl', ['$scope', '$timeout', '$modal', '$cookies', 'ngDa
 			
 			if($scope.myEnv.toUpperCase() !== 'DASHBOARD') {
 				if(!response[$scope.myEnv.toUpperCase()]) {
-					response['DASHBOARD'] = {
+					response[$scope.myEnv.toUpperCase()] = {
 						"branch": "master",
 						"strategy": "notify"
 					};
 				}
 			}
 			
-			if(response){
-				$scope.cdData = response;
-			}
-			if (error) {
-				$scope.displayAlert('danger', error.message);
-			}
+			$scope.cdData = response;
 
 			if(response[$scope.myEnv.toUpperCase()]){
 				$scope.configuration = response[$scope.myEnv.toUpperCase()];
@@ -99,6 +99,7 @@ cdApp.controller('cdAppCtrl', ['$scope', '$timeout', '$modal', '$cookies', 'ngDa
 		$scope.cdData[$scope.myEnv] = configuration;
 		var data = $scope.cdData;
 		delete data.type;
+		delete data.soajsauth;
 		overlayLoading.show();
 		getSendDataFromServer($scope, ngDataApi, {
 			method: 'post',
@@ -208,16 +209,6 @@ cdApp.controller('cdAppCtrl', ['$scope', '$timeout', '$modal', '$cookies', 'ngDa
 						if (service.labels['service.branch']){
 							branch = service.labels['service.branch'];
 						}
-						if (service.labels['soajs.service.name']){
-							service.serviceName = service.labels['soajs.service.name'];
-							if(!objServices[service.serviceName]){
-								objServices[service.serviceName]={
-									versions:[]
-								};
-							}
-							service.versionLabel = 'v'+service.labels['soajs.service.version'];
-							objServices[service.serviceName].versions.push(service);
-						}
 						////
 						if (!branch){
 							for (var x =0; x < service.env.length; x++) {
@@ -233,6 +224,17 @@ cdApp.controller('cdAppCtrl', ['$scope', '$timeout', '$modal', '$cookies', 'ngDa
 							if(branches.indexOf(branch) === -1){
 								branches.push(branch);
 							}
+							
+							if (service.labels['soajs.service.name']){
+								service.serviceName = service.labels['soajs.service.name'];
+								if(!objServices[service.serviceName]){
+									objServices[service.serviceName]={
+										versions:[]
+									};
+								}
+								service.versionLabel = service.labels['soajs.service.version'];
+								objServices[service.serviceName].versions.push(service);
+							}
 						}
 					}
 				});
@@ -247,7 +249,21 @@ cdApp.controller('cdAppCtrl', ['$scope', '$timeout', '$modal', '$cookies', 'ngDa
 		if(!$scope.configuration[name].strategy){
 			$scope.configuration[name].strategy= 'notify';
 		}
+		$scope.objServices[name].icon = 'minus';
+		jQuery('#cd_' + name).slideDown()
 		$scope.configuration[name].branch = $scope.objServices[name].versions[0].branch;
+		
+	};
+	
+	$scope.showHide = function(oneService, name){
+		if(oneService.icon === 'minus'){
+			oneService.icon = 'plus';
+			jQuery('#cd_' + name).slideUp();
+		}
+		else{
+			oneService.icon = 'minus';
+			jQuery('#cd_' + name).slideDown()
+		}
 	};
 
 	$scope.setVersion = function(name,version) {
