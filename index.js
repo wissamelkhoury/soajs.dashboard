@@ -13,6 +13,8 @@ var cloudNodesBL = require("./lib/cloud/nodes.js");
 var cloudMaintenanceBL = require("./lib/cloud/maintenance.js");
 var cloudNamespacesBL = require("./lib/cloud/namespaces.js");
 var catalogBL = require("./lib/catalog/index.js");
+var ciBL = require("./lib/ci/index.js");
+var cdBL = require("./lib/cd/index.js");
 var tenantBL = require("./lib/tenant.js");
 var productBL = require('./lib/product.js');
 var servicesBL = require("./lib/services.js");
@@ -62,7 +64,7 @@ service.init(function () {
 	/**
 	 * Environments features
 	 */
-	
+
 	/**
 	 * Add a new environment
 	 * @param {String} API route
@@ -153,7 +155,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Add environment database
 	 * @param {String} API route
@@ -179,7 +181,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Update environment's database prefix
 	 * @param {String} API route
@@ -244,7 +246,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * List enviornment platforms
 	 * @param {String} API route
@@ -257,7 +259,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Upload platform certificate
 	 * @param {String} API route
@@ -283,7 +285,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Choose existing platform certificate
 	 * @param {String} API route
@@ -309,7 +311,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Change selected platform driver
 	 * @param {String} API route
@@ -339,7 +341,7 @@ service.init(function () {
 	/**
 	 * Products features
 	 */
-	
+
 	/**
 	 * Add a new product
 	 * @param {String} API route
@@ -352,7 +354,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Delete an existing product
 	 * @param {String} API route
@@ -430,7 +432,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Add a new product package
 	 * @param {String} API route
@@ -473,7 +475,7 @@ service.init(function () {
 	/**
 	 * Tenants features
 	 */
-	
+
 	/**
 	 * Add a new tenant
 	 * @param {String} API route
@@ -538,7 +540,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * List tenant oauth configuration
 	 * @param {String} API route
@@ -655,7 +657,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Add a new tenant application
 	 * @param {String} API route
@@ -854,7 +856,7 @@ service.init(function () {
 	/**
 	 * Dashboard Keys
 	 */
-	
+
 	/**
 	 * List external keys with dashboard access
 	 * @param {String} API route
@@ -871,7 +873,7 @@ service.init(function () {
 	/**
 	 * Hosts features
 	 */
-	
+
 	/**
 	 * List existing hosts in manual deployment mode
 	 * @param {String} API route
@@ -884,7 +886,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Perform maintenance operation on a host deployed in manual mode
 	 * @param {String} API route
@@ -901,7 +903,7 @@ service.init(function () {
 	/**
 	 * High Availability Cloud features
 	 */
-	
+
 	/**
 	 * Get all available cluster nodes
 	 * @param {String} API route
@@ -909,12 +911,12 @@ service.init(function () {
 	 */
 	service.get("/cloud/nodes/list", function (req, res) {
 		initBLModel(req, res, cloudNodesBL, dbModel, function (BL) {
-			BL.listNodes(config, req.soajs, res, function (error, data) {
+			BL.listNodes(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
 	});
-	
+
 	/**
 	 * Add a new cluster node
 	 * @param {String} API route
@@ -922,12 +924,12 @@ service.init(function () {
 	 */
 	service.post("/cloud/nodes/add", function (req, res) {
 		initBLModel(req, res, cloudNodesBL, dbModel, function (BL) {
-			BL.addNode(config, req.soajs, res, function (error, data) {
+			BL.addNode(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
 	});
-	
+
 	/**
 	 * Remove an existing cluster node
 	 * @param {String} API route
@@ -935,12 +937,12 @@ service.init(function () {
 	 */
 	service.delete("/cloud/nodes/remove", function (req, res) {
 		initBLModel(req, res, cloudNodesBL, dbModel, function (BL) {
-			BL.removeNode(config, req.soajs, res, function (error, data) {
+			BL.removeNode(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
 	});
-	
+
 	/**
 	 * Update the role or availability of an existing cluster node
 	 * @param {String} API route
@@ -948,7 +950,7 @@ service.init(function () {
 	 */
 	service.put("/cloud/nodes/update", function (req, res) {
 		initBLModel(req, res, cloudNodesBL, dbModel, function (BL) {
-			BL.updateNode(config, req.soajs, res, function (error, data) {
+			BL.updateNode(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
@@ -961,7 +963,7 @@ service.init(function () {
 	 */
 	service.get("/cloud/services/list", function (req, res) {
 		initBLModel(req, res, cloudServicesBL, dbModel, function (BL) {
-			BL.listServices(config, req.soajs, res, function (error, data) {
+			BL.listServices(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
@@ -979,7 +981,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Redeploy a running service
 	 * @param {String} API route
@@ -992,7 +994,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Scale an existing service deployment
 	 * @param {String} API route
@@ -1000,12 +1002,12 @@ service.init(function () {
 	 */
 	service.put("/cloud/services/scale", function (req, res) {
 		initBLModel(req, res, cloudServicesBL, dbModel, function (BL) {
-			BL.scaleService(config, req.soajs, res, function (error, data) {
+			BL.scaleService(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
 	});
-	
+
 	/**
 	 * Delete an existing deployment
 	 * @param {String} API route
@@ -1013,7 +1015,7 @@ service.init(function () {
 	 */
 	service.delete("/cloud/services/delete", function (req, res) {
 		initBLModel(req, res, cloudServicesBL, dbModel, function (BL) {
-			BL.deleteService(config, req.soajs, res, function (error, data) {
+			BL.deleteService(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
@@ -1026,7 +1028,7 @@ service.init(function () {
 	 */
 	service.post("/cloud/services/maintenance", function (req, res) {
 		initBLModel(req, res, cloudMaintenanceBL, dbModel, function (BL) {
-			BL.maintenance(config, req.soajs, res, function (error, data) {
+			BL.maintenance(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
@@ -1052,7 +1054,7 @@ service.init(function () {
 	 */
 	service.get("/cloud/namespaces/list", function (req, res) {
 		initBLModel(req, res, cloudNamespacesBL, dbModel, function (BL) {
-			BL.list(config, req.soajs, res, function (error, data) {
+			BL.list(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
@@ -1065,7 +1067,7 @@ service.init(function () {
 	 */
 	service.delete("/cloud/namespaces/delete", function (req, res) {
 		initBLModel(req, res, cloudNamespacesBL, dbModel, function (BL) {
-			BL.delete(config, req.soajs, res, function (error, data) {
+			BL.delete(config, req.soajs, function (error, data) {
 				return res.json(req.soajs.buildResponse(error, data));
 			});
 		});
@@ -1141,6 +1143,209 @@ service.init(function () {
 	});
 
 	/**
+	 * Continuous Delivery Features
+	 */
+
+	/**
+	 * Get a CD configuration
+	 * @param {String} API route
+	 * @param {Function} API middleware
+	 */
+	service.get("/cd", function (req, res) {
+		initBLModel(req, res, cdBL, dbModel, function (BL) {
+			BL.getConfig(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+	
+	/**
+	 * Get Get Update Notification Ledger
+	 * @param {String} API route
+	 * @param {Function} API middleware
+	 */
+	service.get("/cd/updates", function (req, res) {
+		initBLModel(req, res, cdBL, dbModel, function (BL) {
+			BL.getUpdates(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	 * Save a CD configuration
+	 * @param {String} API route
+	 * @param {Function} API middleware
+	 */
+	service.post("/cd", function (req, res) {
+		initBLModel(req, res, cdBL, dbModel, function (BL) {
+			BL.saveConfig(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	 * Trigger CD deploy operation
+	 * @param {String} API route
+	 * @param {Function} API middleware
+	 */
+	service.post("/cd/deploy", function (req, res) {
+		initBLModel(req, res, cdBL, dbModel, function (BL) {
+			BL.cdDeploy(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+    /**
+     * Take action based on ledger notification
+     * @param {String} API route
+     * @param {Function} API middleware
+     */
+    service.put("/cd/action", function (req, res) {
+        initBLModel(req, res, cdBL, dbModel, function (BL) {
+            BL.cdAction(config, service.registry, req, function (error, data) {
+                return res.jsonp(req.soajs.buildResponse(error, data));
+            });
+        });
+    });
+
+    /**
+     * Lists the ledgers of a specific environment
+     * @param {String} API route
+     * @param {Function} API middleware
+     */
+    service.get("/cd/ledger", function (req, res) {
+        initBLModel(req, res, cdBL, dbModel, function (BL) {
+            BL.getLedger(config, req, function (error, data) {
+                return res.jsonp(req.soajs.buildResponse(error, data));
+            });
+        });
+    });
+
+
+    /**
+     * Marks records as read
+     * @param {String} API route
+     * @param {Function} API middleware
+     */
+    service.put("/cd/ledger/read", function (req, res) {
+        initBLModel(req, res, cdBL, dbModel, function (BL) {
+            BL.markRead(config, req, function (error, data) {
+                return res.jsonp(req.soajs.buildResponse(error, data));
+            });
+        });
+    });
+	/**
+	* Continuous Integration features
+	*/
+
+	/**
+	* Get a CI configuration
+	* @param {String} API route
+	* @param {Function} API middleware
+	*/
+	service.get("/ci", function (req, res) {
+		initBLModel(req, res, ciBL, dbModel, function (BL) {
+			BL.getConfig(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	 * Turn On/Off Repository CI
+	 * @param {String} API route
+	 * @param {Function} API middleware
+	 */
+	service.get("/ci/status", function (req, res) {
+		initBLModel(req, res, ciBL, dbModel, function (BL) {
+			BL.toggleRepoStatus(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	* Save a CI configuration
+	* @param {String} API route
+	* @param {Function} API middleware
+	*/
+	service.post("/ci", function (req, res) {
+		initBLModel(req, res, ciBL, dbModel, function (BL) {
+			BL.saveConfig(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	* Delete a CI configuration
+	* @param {String} API route
+	* @param {Function} API middleware
+	*/
+	service.delete("/ci", function (req, res) {
+		initBLModel(req, res, ciBL, dbModel, function (BL) {
+			BL.deleteConfig(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	* Download a CI recipe
+	* @param {String} API route
+	* @param {Function} API middleware
+	*/
+	service.get("/ci/download", function (req, res) {
+		initBLModel(req, res, ciBL, dbModel, function (BL) {
+			BL.downloadRecipe(config, req, res, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	* Get ci repository settings and environment variables
+	* @param {String} API route
+	* @param {Function} API middleware
+	*/
+	service.get("/ci/settings", function (req, res) {
+		initBLModel(req, res, ciBL, dbModel, function (BL) {
+			BL.getRepoSettings(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	* Update ci repository settings and environment variables
+	* @param {String} API route
+	* @param {Function} API middleware
+	*/
+	service.put("/ci/settings", function (req, res) {
+		initBLModel(req, res, ciBL, dbModel, function (BL) {
+			BL.updateRepoSettings(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
+	* Sync all CI repositories
+	* @param {String} API route
+	* @param {Function} API middleware
+	*/
+	service.get("/ci/sync", function (req, res) {
+		initBLModel(req, res, ciBL, dbModel, function (BL) {
+			BL.syncRepos(config, req, function (error, data) {
+				return res.jsonp(req.soajs.buildResponse(error, data));
+			});
+		});
+	});
+
+	/**
 	 * Git App features gitAccountsBL
 	 */
 
@@ -1169,7 +1374,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * List all available git accounts
 	 * @param {String} API route
@@ -1260,11 +1465,11 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Services features
 	 */
-	
+
 	/**
 	 * List available services
 	 * @param {String} API route
@@ -1293,7 +1498,7 @@ service.init(function () {
 	/**
 	 * Daemons features
 	 */
-	
+
 	/**
 	 * List available daemons
 	 * @param {String} API route
@@ -1410,11 +1615,11 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Static Content features
 	 */
-	
+
 	/**
 	 * List available static content
 	 * @param {String} API route
@@ -1840,7 +2045,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Analytics:
 	 * Api that get settings of current Analytics in all environments
@@ -1854,7 +2059,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Analytics:
 	 * Api that activate analytics in an environment
@@ -1868,7 +2073,7 @@ service.init(function () {
 			});
 		});
 	});
-	
+
 	/**
 	 * Analytics:
 	 * Api that deploys elasticsearch locally
