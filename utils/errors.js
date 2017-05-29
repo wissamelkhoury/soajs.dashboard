@@ -265,7 +265,7 @@ var errors = {
 	"956": "Authentication failed. The deploy token provided is not valid.",
 	
 	"960": "Elasticsearch analytics cluster not found",
-	"961": "Invalid Elasticsearch analytics cluster"
+	"961": "Invalid Elasticsearch analytics cluster",
 
     "969": "The chosen Continuous Integration Service does not exist",
     "970": "The chosen driver does not support the selected function",
