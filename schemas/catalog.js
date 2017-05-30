@@ -102,7 +102,8 @@ module.exports = {
 		                                "type": { "type": "string", "required": true, "enum": [ "static", "userInput", "computed" ]},
 		                                "label": {"type": "string", "required": false},
 		                                "fieldMsg": {"type": "string", "required": false},
-		                                "default": {"type": "string", "required": false}
+		                                "default": {"type": "string", "required": false},
+                                        "required": { "type": "boolean", "required": false }
 	                                }
                                 }
                             },
