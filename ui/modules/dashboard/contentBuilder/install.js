@@ -399,14 +399,46 @@ var cbTranslation = {
 		"ENG": "Should this service apply device and geo security checks on provided keys?",
 		"FRA": "Should this service apply device and geo security checks on provided keys?"
 	},
-	"secureWithoAuth": {
-		"ENG": "Secure with oAuth",
-		"FRA": "Secure with oAuth"
-	},
-	"cbFormStep3oauthFieldMsg": {
-		"ENG": "Should this service be secured via oAuth?",
-		"FRA": "Should this service be secured via oAuth?"
-	},
+    "secureWithoAuth": {
+        "ENG": "Secure with oAuth",
+        "FRA": "Secure with oAuth"
+    },
+    "requireurac": {
+        "ENG": "URAC",
+        "FRA": "URAC"
+    },
+    "urac_Profile": {
+        "ENG": "URAC Profile",
+        "FRA": "name"
+    },
+    "urac_ACL": {
+        "ENG": "URAC ACL",
+        "FRA": "URAC ACL"
+    },
+    "provision_ACL": {
+        "ENG": "Provision ACL",
+        "FRA": "Provision ACL"
+    },
+    "cbFormStep3oauthFieldMsg": {
+        "ENG": "Should this service be secured via oAuth?",
+        "FRA": "Should this service be secured via oAuth?"
+    },
+    "cbFormStep3uracFieldMsg": {
+        "ENG": "This service requires access to the logged in user record in its business logic",
+        "FRA": "This service requires access to the logged in user record in its business logic"
+    },
+    "cbFormStep3urac_ProfileFieldMsg": {
+        "ENG": "This service requires access to the logged in user profile in its business logic",
+        "FRA": "This service requires access to the logged in user profile in its business logic"
+    },
+    "cbFormStep3urac_ACLFieldMsg": {
+        "ENG": "This service requires access to the logged in user Access Level in its business logic",
+        "FRA": "This service requires access to the logged in user Access Level in its business logic"
+    },
+    "cbFormStep3provision_ACLFieldMsg": {
+        "ENG": "This service requires access to package and tenant ACL in its business logic",
+        "FRA": "This service requires access to package and tenant ACL in its business logic"
+    },
 	"basicAPIInformation": {
 		"ENG": "Basic API Information'",
 		"FRA": "Basic API Information'"

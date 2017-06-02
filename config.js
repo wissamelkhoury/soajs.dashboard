@@ -21,7 +21,11 @@ module.exports = {
     "awarenessEnv": true,
     "oauth": true,
     "session": true,
-
+	"uracDriver" : true,
+	"urac_Profile" : true,
+	"urac_ACL" : true,
+	"provision_ACL" : true,
+	"urac" : true,
     "hasher": {
         "hashIterations": 1024,
         "seedLength": 32
@@ -2208,6 +2212,22 @@ module.exports = {
                                         "type": "boolean",
                                         "required": true
                                     },
+	                                "urac": {
+		                                "type": "boolean",
+		                                "required": true
+	                                },
+	                                "urac_Profile": {
+		                                "type": "boolean",
+		                                "required": true
+	                                },
+	                                "urac_ACL": {
+		                                "type": "boolean",
+		                                "required": true
+	                                },
+	                                "provision_ACL": {
+		                                "type": "boolean",
+		                                "required": true
+	                                },
                                     "session": {
                                         "type": "boolean",
                                         "required": false

@@ -172,7 +172,7 @@ contentBuilderService.service('cbHelper', ['ngDataApi', '$timeout', '$modal', fu
 				"soajsService": data.soajsService,
 				"soajsUI": data.soajsUI
 			};
-			if(currentScope.config.genericService.options.multitenant) {
+			if(currentScope.config.genericService.config.extKeyRequired) {
 				for(var envName in data.soajsService.db.config) {
 					var dbName = data.name;
 					currentScope.config.clustertoUse[envName] = {
@@ -201,7 +201,7 @@ contentBuilderService.service('cbHelper', ['ngDataApi', '$timeout', '$modal', fu
 			else {
 				currentScope.envList = [];
 				response.forEach(function(oneEnvironment) {
-					if(oneEnvironment.code !== 'dashboard'){
+					if(oneEnvironment.code.toLowerCase() !== 'dashboard'){
 						if(Object.keys(oneEnvironment.dbs.clusters).length > 0) {
 							currentScope.nextStep = true;
 						}
@@ -212,6 +212,7 @@ contentBuilderService.service('cbHelper', ['ngDataApi', '$timeout', '$modal', fu
 						});
 					}
 				});
+				
 				if(cb && typeof(cb) === 'function') { cb(); }
 			}
 		});
@@ -229,6 +230,7 @@ contentBuilderService.service('cbHelper', ['ngDataApi', '$timeout', '$modal', fu
 			label: '',
 			actions: []
 		};
+
 		buildForm(currentScope, null, options);
 
 		function reconstructData() {
@@ -256,17 +258,13 @@ contentBuilderService.service('cbHelper', ['ngDataApi', '$timeout', '$modal', fu
                 data['maxFileUpload'] = currentScope.config.genericService.config.maxFileUpload;
             }
 
-			data['extKeyRequired'] = (currentScope.config.genericService.config.extKeyRequired);
-			data['awareness'] = (currentScope.config.genericService.config.awareness);
-			data['session'] = (currentScope.config.genericService.options.session);
-			data['acl'] = (currentScope.config.genericService.options.acl);
-			data['security'] = (currentScope.config.genericService.options.security);
-			data['oauth'] = (currentScope.config.genericService.options.oauth);
-
-			if(currentScope.config.genericService.options.multitenant) {
-				data['extKeyRequired'] = true;
-				data['security'] = true;
-			}
+            data['extKeyRequired'] = (currentScope.config.genericService.config.extKeyRequired=== false ? false  : true);
+            data['session'] = (currentScope.config.genericService.config.session=== true ? true  : false);
+            data['oauth'] = (currentScope.config.genericService.config.oauth=== false ? false  : true);
+            data['urac'] =  (currentScope.config.genericService.config.urac === false ? false  : true);
+            data['urac_Profile'] = (currentScope.config.genericService.config.urac_Profile=== true ? true  : false);
+            data['urac_ACL'] = (currentScope.config.genericService.config.urac_ACL=== true ? true  : false);
+            data['provision_ACL'] = (currentScope.config.genericService.config.provision_ACL=== true ? true  : false);
 
 			if(currentScope.config.soajsService.db.collection) {
 				data['collection'] = currentScope.config.soajsService.db.collection;
@@ -337,7 +335,7 @@ contentBuilderService.service('cbHelper', ['ngDataApi', '$timeout', '$modal', fu
 			for(var i in commonFields) {
 				if(commonFields.hasOwnProperty(i)) {
 					if(commonFields[i].required) {
-						commonFields[i].req = commonFields[i].required;
+						commonFields[i].req = commonFields[i].required ? true : false;
 						delete commonFields[i].required;
 					}
 				}
@@ -350,10 +348,9 @@ contentBuilderService.service('cbHelper', ['ngDataApi', '$timeout', '$modal', fu
 					for(var field in formConfig[j]) {
 						if(formConfig[j].hasOwnProperty(field)) {
 							if(field === 'required') {
-								formConfig[j].req = formConfig[j]['required'];
+								formConfig[j].req = formConfig[j]['required'] ?formConfig[j]['required']  : false ;
 								delete formConfig[j]['required'];
 							}
-
 							if(field === 'type') {
 								formConfig[j]._type = formConfig[j]['type'];
 								delete formConfig[j]['type'];
