@@ -91,6 +91,7 @@ var errors = {
 	"512": "environment database does not exist",
 	"513": "Error updating environment database",
 	"514": "Error removing environment database",
+	"550": "Used For Analytics Can database is only available in dashboard environment",
 
 	"600": "Database error",
 	"601": "No Logged in User found.",

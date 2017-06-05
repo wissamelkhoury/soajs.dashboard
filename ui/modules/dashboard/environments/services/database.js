@@ -60,6 +60,16 @@ dbServices.service('envDB', ['ngDataApi', '$timeout', '$modal', function (ngData
 				}
 			});
 		}
+		//removed usedForAnalytics if environment is not dashboard
+		if(env.toLowerCase() !== 'dashboard'){
+			if(form.entries){
+				for (var y = form.entries.length - 1; y >= 0; y--) {
+					if (form.entries[y].name === 'usedForAnalytics') {
+						form.entries.splice(y, 1);
+					}
+				}
+			}
+		}
 		var options = {
 			timeout: $timeout,
 			form: form,
@@ -160,6 +170,15 @@ dbServices.service('envDB', ['ngDataApi', '$timeout', '$modal', function (ngData
 					});
 				}
 			});
+		}
+		if(env.toLowerCase() !== 'dashboard'){
+			if(formConfig.entries){
+				for (var y = formConfig.entries.length - 1; y >= 0; y--) {
+					if (formConfig.entries[y].name === 'usedForAnalytics') {
+						formConfig.entries.splice(y, 1);
+					}
+				}
+			}
 		}
 		var options = {
 			timeout: $timeout,

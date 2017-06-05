@@ -1269,7 +1269,15 @@ module.exports = {
                     "validation": {
                         "type": "string", "required": true
                     }
-                }
+                },
+	            "elasticsearch": {
+		            "source": ['query.elasticsearch'],
+		            "required": false,
+		            "validation": {
+			            "type": "string",
+			            "enum": ["local"]
+		            }
+	            }
             },
 
             "/analytics/deactivateAnalytics": {
@@ -2261,6 +2269,7 @@ module.exports = {
                 }
             }
         },
+	    
         "put": {
             "/cd/ledger/read":{
                 "_apiInfo": {

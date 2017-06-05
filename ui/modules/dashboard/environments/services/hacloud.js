@@ -1095,19 +1095,18 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 									'action': function (formData) {
 										getSendDataFromServer(currentScope, ngDataApi, {
 											"method": "get",
-											"routeName": "/dashboard/analytics/deployLocalElastic",
+											"routeName": "/dashboard/analytics/activateAnalytics",
 											"params": {
-												"env": env
+												"env": env,
+												"elasticsearch": "local"
 											}
 										}, function (error) {
 											if (error) {
 												currentScope.displayAlert('danger', error);
-												currentScope.modalInstance.close();
 												currentScope.form.formData = {};
 											}
 											else {
 												currentScope.$parent.displayAlert('info', "Local Elasticsearch is being deployed");
-												currentScope.modalInstance.close();
 												currentScope.form.formData = {};
 											}
 										});
@@ -1126,6 +1125,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 							]
 						};
 						buildFormWithModal(currentScope, $modal, options);
+						currentScope.modalInstance.close();
 					}
 					else {
 						currentScope.displayAlert('danger', error);
