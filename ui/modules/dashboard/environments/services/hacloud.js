@@ -1083,6 +1083,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 							msgs: {
 								"header": translation.elasticSearchLocalMessage[LANG] + "?"
 							},
+							//es_analytics_cluster_a53511f0-def6-4b42-9a5a-fa6ddde47987
 							size: "dialog",
 							form: dataForm,
 							name: 'chooseLocal',
