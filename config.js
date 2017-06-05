@@ -1293,7 +1293,7 @@ module.exports = {
                     }
                 }
             },
-	
+
 	        "/analytics/deployLocalElastic": {
 		        _apiInfo: {
 			        "l": "Deploy Local Elasticsearch",
@@ -1746,6 +1746,10 @@ module.exports = {
                                 "required": false,
                                 "type": "number",
                                 "minimum": 1
+                            },
+                            "allEnv": { //flag that indicates that a service is not per environment
+                                "required": false,
+                                "type": "boolean"
                             },
                             "daemonGroup": {
                                 "required": false,
@@ -2269,7 +2273,7 @@ module.exports = {
                 }
             }
         },
-	    
+
         "put": {
             "/cd/ledger/read":{
                 "_apiInfo": {
