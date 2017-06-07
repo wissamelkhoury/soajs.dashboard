@@ -486,9 +486,21 @@ var translation = {
 		"ENG": "Deploy Elasticsearch Locally",
 		"FRA": "Deploy Elasticsearch Locally"
 	},
-	"elasticSearchLocalMessage": {
-		"ENG": "No Elasticsearch database was found, Do you want to deploy Elasticsearch locally",
-		"FRA": "No Elasticsearch database was found, Do you want to deploy Elasticsearch locally"
+	"deployEs": {
+		"ENG": "Deploy Elasticsearch",
+		"FRA": "Deploy Elasticsearch"
+	},
+	"elasticSearchMessage": {
+		"ENG": "No Analytics Elasticsearch database was found.",
+		"FRA": "No Analytics Elasticsearch database was found."
+	},
+	"GoToDatabases": {
+		"ENG": "Go to Databases",
+		"FRA": "Go to Databases"
+	},
+	"localEsIsBeingDeployed": {
+		"ENG": "Local Elasticsearch is being deployed",
+		"FRA": "Local Elasticsearch is being deployed"
 	},
 	"created": {
 		"ENG": "Created",

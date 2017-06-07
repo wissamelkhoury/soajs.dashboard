@@ -142,6 +142,30 @@
 	</div>
 </script>
 
+<script type="text/ng-template" id="localElastic.html">
+	<div class="modal-header">
+		<table width="100%">
+			<tr>
+				<td width="80%">
+					<h3 class="modal-title">{{title}}</h3>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal-body">
+		<div class="alert alert-warning">
+			{{translation.elasticSearchMessage[LANG]}}
+		</div>
+		<br>
+		<p>If you already have a Running ELasticsearch please <b>{{translation.GoToDatabases[LANG]}}</b>, add it and set it used for analytics. Or <b>{{translation.deployLocalEs[LANG]}}</b></p>
+	</div>
+	<div class="modal-footer">
+		<a href="#/environments-dbs" class="btn btn-success" ng-click="close()">{{translation.GoToDatabases[LANG]}}</a>
+		<button class="btn btn-primary" ng-click="deployEsLocally()">{{translation.deployLocalEs[LANG]}}</button>
+		<button class="btn btn-danger" ng-click="close()">{{translation.close[LANG]}}</button>
+	</div>
+</script>
+
 <section ng-controller="hacloudCtrl">
 	<tabset>
 		<tab heading="Nodes" ng-if="access.hacloud.nodes.list">

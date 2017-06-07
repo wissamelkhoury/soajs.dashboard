@@ -11,10 +11,10 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 		var env = currentScope.envCode.toLowerCase();
 		currentScope.showCtrlHosts = true;
 		currentScope.soajsServices = false;
-        currentScope.controllers =[];
+		currentScope.controllers = [];
 		if (currentScope.access.listHosts) {
 			
-			getUpdatesNotifications(function(){
+			getUpdatesNotifications(function () {
 				getSendDataFromServer(currentScope, ngDataApi, {
 					"method": "get",
 					"routeName": "/dashboard/cloud/services/list",
@@ -52,8 +52,8 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 							for (var j = 0; j < response.length; j++) {
 								response[j].expanded = true;
 								
-								for(var u=0; u < currentScope.updatesNotifications.length; u++){
-									if(response[j].id === currentScope.updatesNotifications[u].id){
+								for (var u = 0; u < currentScope.updatesNotifications.length; u++) {
+									if (response[j].id === currentScope.updatesNotifications[u].id) {
 										switch (currentScope.updatesNotifications[u].mode) {
 											case 'image':
 												response[j].imageUpdate = true;
@@ -85,18 +85,18 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 								
 								response[j].failures = failures;
 								
-								if(response[j].labels && response[j].labels['soajs.content'] === 'true'){
+								if (response[j].labels && response[j].labels['soajs.content'] === 'true') {
 									currentScope.soajsServices = true;
-									if(response[j].labels['soajs.service.name'] === 'controller' && !response[j].labels['soajs.service.group']){
+									if (response[j].labels['soajs.service.name'] === 'controller' && !response[j].labels['soajs.service.group']) {
 										response[j].labels['soajs.service.group'] = "SOAJS Core Services";
 										response[j].labels['soajs.service.group'] = response[j].labels['soajs.service.group'].toLowerCase().replace(/\s+/g, '-').replace(/_/g, '-');
 									}
-									if(['nginx', 'db', 'elk'].indexOf(response[j].labels['soajs.service.group']) !== -1){
+									if (['nginx', 'db', 'elk'].indexOf(response[j].labels['soajs.service.group']) !== -1) {
 										currentScope.hosts[response[j].labels['soajs.service.group']].list.push(response[j]);
 									}
-									else{
+									else {
 										currentScope.envDeployed = true;
-										if(!currentScope.hosts.soajs.groups){
+										if (!currentScope.hosts.soajs.groups) {
 											currentScope.hosts.soajs.groups = {};
 										}
 										
@@ -110,19 +110,19 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 											};
 										}
 										
-										if(response[j].labels['soajs.service.name'] === 'controller'){
+										if (response[j].labels['soajs.service.name'] === 'controller') {
 											currentScope.hosts.soajs.groups[groupName].list.unshift(response[j]);
 											currentScope.controllers.push(response[j]);
 										}
-										else{
+										else {
 											currentScope.hosts.soajs.groups[groupName].list.push(response[j]);
 										}
 									}
 								}
-								else{
+								else {
 									//service is not SOAJS
 									var myGroup = 'miscellaneous';
-									if(response[j].labels && response[j].labels['soajs.service.group']){
+									if (response[j].labels && response[j].labels['soajs.service.group']) {
 										myGroup = response[j].labels['soajs.service.group'];
 									}
 									currentScope.hosts[myGroup].list.push(response[j]);
@@ -131,19 +131,19 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 							
 							step2();
 						}
-						else{
+						else {
 							delete currentScope.hosts;
 						}
 					}
 				});
 			});
-        }
-
+		}
+		
 		function step2() {
 			currentScope.controllers.forEach(function (oneController) {
 				var i = 1;
 				var failure = 0;
-
+				
 				oneController.tasks.forEach(function (oneCtrlTask) {
 					oneCtrlTask.code = "CTRL-" + i;
 					var healthy = (oneCtrlTask.status.state === 'running');
@@ -151,15 +151,15 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 					if (!healthy) {
 						failure++;
 					}
-
+					
 					var tooltip = "<b>Name:</b> " + oneCtrlTask.name + "<br>";
 					tooltip += "<b>State:</b> " + oneCtrlTask.status.state + "<br>";
 					tooltip += "<b>Started:</b> " + oneCtrlTask.status.ts;
-
+					
 					oneCtrlTask.tooltip = $sce.trustAsHtml(tooltip);
 					i++;
 				});
-
+				
 				if (failure === 0) {
 					oneController.color = 'green';
 				}
@@ -170,12 +170,12 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 					oneController.color = 'red';
 				}
 			});
-			if(cb && typeof cb === 'function'){
+			if (cb && typeof cb === 'function') {
 				return cb();
 			}
 		}
 		
-		function getUpdatesNotifications(cb){
+		function getUpdatesNotifications(cb) {
 			//check for code updates
 			getSendDataFromServer(currentScope, ngDataApi, {
 				method: 'get',
@@ -189,8 +189,8 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				}
 				else {
 					currentScope.updatesNotifications = [];
-					response.forEach(function(oneCodeUpdateEntry){
-						if(oneCodeUpdateEntry.notify && !oneCodeUpdateEntry.manual){
+					response.forEach(function (oneCodeUpdateEntry) {
+						if (oneCodeUpdateEntry.notify && !oneCodeUpdateEntry.manual) {
 							currentScope.updatesNotifications.push({
 								id: oneCodeUpdateEntry.serviceId
 							})
@@ -209,7 +209,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 							currentScope.displayAlert('danger', error.message);
 						}
 						else {
-							response.forEach(function(oneUpdateEntry){
+							response.forEach(function (oneUpdateEntry) {
 								currentScope.updatesNotifications.push({
 									id: oneUpdateEntry.id,
 									mode: oneUpdateEntry.mode
@@ -222,7 +222,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			});
 		}
 	}
-
+	
 	/**
 	 * List all namespaces for kubernetes deployments and add values to scope
 	 *
@@ -236,7 +236,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			currentScope.namespaceConfig.namespace = currentScope.namespaceConfig.defaultValue.id;
 			return cb();
 		}
-
+		
 		getSendDataFromServer(currentScope, ngDataApi, {
 			method: 'get',
 			routeName: '/dashboard/cloud/namespaces/list'
@@ -247,23 +247,23 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			else {
 				currentScope.namespaces = [currentScope.namespaceConfig.defaultValue];
 				currentScope.namespaces = currentScope.namespaces.concat(response);
-
+				
 				currentScope.namespaceConfig.namespace = currentScope.namespaceConfig.defaultValue.id; //setting current selected to 'All Namespaces'
-
+				
 				if (cb && typeof(cb) === 'function') {
 					return cb();
 				}
 			}
 		});
 	}
-
+	
 	function deleteService(currentScope, service) {
 		var params = {
 			env: currentScope.envCode,
 			serviceId: service.id,
 			mode: ((service.labels && service.labels['soajs.service.mode']) ? service.labels['soajs.service.mode'] : '')
 		};
-
+		
 		overlayLoading.show();
 		getSendDataFromServer(currentScope, ngDataApi, {
 			method: 'delete',
@@ -280,7 +280,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			}
 		});
 	}
-
+	
 	function scaleService(currentScope, service) {
 		$modal.open({
 			templateUrl: "scaleService.tmpl",
@@ -289,10 +289,10 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			keyboard: true,
 			controller: function ($scope, $modalInstance) {
 				fixBackDrop();
-
+				
 				$scope.currentScale = service.tasks.length;
 				$scope.title = service.name + ' | Scale Service';
-
+				
 				$scope.onSubmit = function () {
 					overlayLoading.show();
 					getSendDataFromServer(currentScope, ngDataApi, {
@@ -317,14 +317,14 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					});
 				};
-
+				
 				$scope.closeModal = function () {
 					$modalInstance.close();
 				};
 			}
 		});
 	}
-
+	
 	function inspectService(currentScope, service) {
 		$modal.open({
 			templateUrl: "infoService.tmpl",
@@ -333,31 +333,31 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			keyboard: true,
 			controller: function ($scope, $modalInstance) {
 				fixBackDrop();
-
+				
 				$scope.title = service.name + ' | Service Info';
 				$scope.serviceInfo = service;
-
+				
 				$scope.fillAceWithInfo = function (_editor) {
 					$timeout(function () {
 						_editor.setValue(JSON.stringify($scope.serviceInfo, null, 2));
 					}, 1000);
 				};
-
+				
 				$scope.closeModal = function () {
 					$modalInstance.close();
 				};
 			}
 		});
 	}
-
-    function redeployService(currentScope, service) {
-        var params = {
-            env: currentScope.envCode,
-            serviceId: service.id,
+	
+	function redeployService(currentScope, service) {
+		var params = {
+			env: currentScope.envCode,
+			serviceId: service.id,
 			mode: ((service.labels && service.labels['soajs.service.mode']) ? service.labels['soajs.service.mode'] : ''),
 			action: 'redeploy'
-        };
-
+		};
+		
 		overlayLoading.show();
 		getSendDataFromServer(currentScope, ngDataApi, {
 			method: 'put',
@@ -374,8 +374,8 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			}
 		});
 	}
-
-    function rebuildService(currentScope, service) {
+	
+	function rebuildService(currentScope, service) {
 		getSendDataFromServer(currentScope, ngDataApi, {
 			method: 'get',
 			routeName: '/dashboard/catalog/recipes/get',
@@ -383,15 +383,15 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				'id': service.labels['soajs.catalog.id']
 			}
 		}, function (error, catalogRecipe) {
-			if(error){
+			if (error) {
 				currentScope.displayAlert('danger', error.message);
 			}
-			else{
+			else {
 				var formConfig = {
 					entries: []
 				};
-
-				if(catalogRecipe.recipe.deployOptions.image.override){
+				
+				if (catalogRecipe.recipe.deployOptions.image.override) {
 					//append images
 					formConfig.entries.push({
 						'name': "ImagePrefix",
@@ -400,7 +400,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						'value': catalogRecipe.recipe.deployOptions.image.prefix,
 						'fieldMsg': "Override the image prefix if you want"
 					});
-
+					
 					formConfig.entries.push({
 						'name': "ImageName",
 						'label': "Image Name",
@@ -408,7 +408,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						'value': catalogRecipe.recipe.deployOptions.image.name,
 						'fieldMsg': "Override the image name if you want"
 					});
-
+					
 					formConfig.entries.push({
 						'name': "ImageTag",
 						'label': "Image Tag",
@@ -417,15 +417,15 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						'fieldMsg': "Override the image tag if you want"
 					});
 				}
-
+				
 				//append inputs whose type is userInput
-				for(var envVariable in catalogRecipe.recipe.buildOptions.env){
-					if(catalogRecipe.recipe.buildOptions.env[envVariable].type === 'userInput'){
-
+				for (var envVariable in catalogRecipe.recipe.buildOptions.env) {
+					if (catalogRecipe.recipe.buildOptions.env[envVariable].type === 'userInput') {
+						
 						var defaultValue = catalogRecipe.recipe.buildOptions.env[envVariable].default || '';
 						//todo: get value from service.env
-						service.env.forEach(function(oneEnv){
-							if(oneEnv.indexOf(envVariable) !== -1){
+						service.env.forEach(function (oneEnv) {
+							if (oneEnv.indexOf(envVariable) !== -1) {
 								defaultValue = oneEnv.split("=")[1];
 							}
 						});
@@ -437,19 +437,19 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 							'value': defaultValue,
 							'fieldMsg': catalogRecipe.recipe.buildOptions.env[envVariable].fieldMsg
 						};
-
-						if(!defaultValue || defaultValue === ''){
+						
+						if (!defaultValue || defaultValue === '') {
 							newInput.required = true;
 						}
-
+						
 						formConfig.entries.push(newInput);
 					}
 				}
-
-				if(formConfig.entries.length === 0){
+				
+				if (formConfig.entries.length === 0) {
 					doRebuild(null);
 				}
-				else{
+				else {
 					var options = {
 						timeout: $timeout,
 						form: formConfig,
@@ -479,16 +479,16 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				}
 			}
 		});
-
-		function doRebuild(formData){
+		
+		function doRebuild(formData) {
 			var params = {
 				env: currentScope.envCode,
 				serviceId: service.id,
 				mode: ((service.labels && service.labels['soajs.service.mode']) ? service.labels['soajs.service.mode'] : ''),
 				action: 'rebuild'
 			};
-
-			if(formData && Object.keys(formData).length > 0){
+			
+			if (formData && Object.keys(formData).length > 0) {
 				//inject user input catalog entry and image override
 				params.custom = {
 					image: {
@@ -497,17 +497,17 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						tag: formData['ImageTag']
 					}
 				};
-
-				for( var input in formData){
-					if(input.indexOf('_ci_') !== -1){
-						if(!params.custom.env){
+				
+				for (var input in formData) {
+					if (input.indexOf('_ci_') !== -1) {
+						if (!params.custom.env) {
 							params.custom.env = {};
 						}
 						params.custom.env[input.replace('_ci_', '')] = formData[input];
 					}
 				}
 			}
-
+			
 			overlayLoading.show();
 			getSendDataFromServer(currentScope, ngDataApi, {
 				method: 'put',
@@ -522,15 +522,15 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 					currentScope.displayAlert('success', 'Service rebuilt successfully');
 					currentScope.listServices();
 					overlayLoading.hide();
-					if(currentScope.modalInstance){
+					if (currentScope.modalInstance) {
 						currentScope.modalInstance.dismiss();
 					}
 				}
 			});
 		}
-    }
-
-
+	}
+	
+	
 	/**
 	 * Troubleshooting and Maintenance Operations
 	 * @param currentScope
@@ -573,7 +573,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					});
 				});
-
+				
 				var options = {
 					timeout: $timeout,
 					form: formConfig,
@@ -592,12 +592,12 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					]
 				};
-
+				
 				buildFormWithModal(currentScope, $modal, options);
 			}
 		});
 	}
-
+	
 	function loadServiceProvision(currentScope, service) {
 		//reload provision for all service instances in parallel
 		getSendDataFromServer(currentScope, ngDataApi, {
@@ -615,7 +615,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				currentScope.generateNewMsg(currentScope.envCode, 'danger', "Error Executing Load Provision for: " + service.name + " @ " + new Date().toISOString());
 			}
 			else {
-
+				
 				var formConfig = angular.copy(environmentsConfig.form.multiServiceInfo);
 				response.forEach(function (oneRegistry) {
 					service.tasks.forEach(function (oneTask) {
@@ -634,7 +634,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					});
 				});
-
+				
 				var options = {
 					timeout: $timeout,
 					form: formConfig,
@@ -653,12 +653,12 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					]
 				};
-
+				
 				buildFormWithModal(currentScope, $modal, options);
 			}
 		});
 	}
-
+	
 	function loadDaemonStats(currentScope, service) {
 		getSendDataFromServer(currentScope, ngDataApi, {
 			"method": "post",
@@ -675,7 +675,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				currentScope.generateNewMsg(currentScope.envCode, 'danger', "Error Executing Reload Daemon Stat for: " + service.name + " @ " + new Date().toISOString());
 			}
 			else {
-
+				
 				var formConfig = angular.copy(environmentsConfig.form.multiServiceInfo);
 				response.forEach(function (oneRegistry) {
 					service.tasks.forEach(function (oneTask) {
@@ -694,7 +694,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					});
 				});
-
+				
 				var options = {
 					timeout: $timeout,
 					form: formConfig,
@@ -713,12 +713,12 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					]
 				};
-
+				
 				buildFormWithModal(currentScope, $modal, options);
 			}
 		});
 	}
-
+	
 	function loadDaemonGroupConfig(currentScope, service) {
 		getSendDataFromServer(currentScope, ngDataApi, {
 			"method": "post",
@@ -735,7 +735,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				currentScope.generateNewMsg(currentScope.envCode, 'danger', "Error Executing Reload Daemon Group Configuration for: " + service.name + " @ " + new Date().toISOString());
 			}
 			else {
-
+				
 				var formConfig = angular.copy(environmentsConfig.form.multiServiceInfo);
 				response.forEach(function (oneRegistry) {
 					service.tasks.forEach(function (oneTask) {
@@ -754,7 +754,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					});
 				});
-
+				
 				var options = {
 					timeout: $timeout,
 					form: formConfig,
@@ -773,12 +773,12 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					]
 				};
-
+				
 				buildFormWithModal(currentScope, $modal, options);
 			}
 		});
 	}
-
+	
 	function executeHeartbeatTest(currentScope, service) {
 		getSendDataFromServer(currentScope, ngDataApi, {
 			"method": "post",
@@ -802,16 +802,16 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						if (oneServiceTask.id === oneHeartBeat.id) {
 							if (!oneHeartBeat.response.result) {
 								oneServiceTask.status.state = 'Unreachable';
-
+								
 								var tooltip = "<b>Code:</b> " + oneHeartBeat.response.error.code + "<br>";
 								tooltip += "<b>Errno:</b> " + oneHeartBeat.response.error.errno + "<br>";
 								tooltip += "<b>Syscall:</b> " + oneHeartBeat.response.error.syscall + "<br>";
 								tooltip += "<b>Address:</b> " + oneHeartBeat.response.error.address + "<br>";
 								tooltip += "<b>Port:</b> " + oneHeartBeat.response.error.port + "<br>";
-
+								
 								oneServiceTask.status.error = tooltip;
 								failCount++;
-
+								
 								if (service.labels['soajs.service.name'] === 'controller') {
 									currentScope.controllers.forEach(function (oneController) {
 										if (oneController.id === oneServiceTask.id) {
@@ -827,7 +827,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						}
 					});
 				});
-
+				
 				if (failCount === heartbeatResponse.length) {
 					service.color = 'red';
 				}
@@ -840,7 +840,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			}
 		});
 	}
-
+	
 	function executeAwarenessTest(currentScope, service) {
 		getSendDataFromServer(currentScope, ngDataApi, {
 			"method": "post",
@@ -861,7 +861,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			}
 		});
 	}
-
+	
 	function hostLogs(currentScope, task) {
 		overlayLoading.show();
 		getSendDataFromServer(currentScope, ngDataApi, {
@@ -879,7 +879,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			}
 			else {
 				var autoRefreshPromise;
-
+				
 				var mInstance = $modal.open({
 					templateUrl: "logBox.html",
 					size: 'lg',
@@ -893,7 +893,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 						$timeout(function () {
 							highlightMyCode()
 						}, 500);
-
+						
 						$scope.refreshLogs = function () {
 							getSendDataFromServer(currentScope, ngDataApi, {
 								method: "get",
@@ -912,27 +912,27 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 									if (!$scope.$$phase) {
 										$scope.$apply();
 									}
-
+									
 									fixBackDrop();
 									$timeout(function () {
 										highlightMyCode()
 									}, 500);
-
+									
 									autoRefreshPromise = $timeout(function () {
 										$scope.refreshLogs();
 									}, 5000);
 								}
 							});
 						};
-
+						
 						$scope.ok = function () {
 							$modalInstance.dismiss('ok');
 						};
-
+						
 						$scope.refreshLogs();
 					}
 				});
-
+				
 				mInstance.result.then(function () {
 					//Get triggers when modal is closed
 					$timeout.cancel(autoRefreshPromise);
@@ -942,7 +942,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				});
 			}
 		});
-
+		
 		function remove_special(str) {
 			if (!str) {
 				return 'No logs found for this instance'; //in case container has no logs, return message to display
@@ -973,7 +973,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			return str;
 		}
 	}
-
+	
 	/**
 	 * Analytics
 	 * @param currentScope
@@ -993,16 +993,16 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			filter = "&_a=(query:(query_string:(analyze_wildcard:!t,query:'";
 			if (task && type === 'task') {
 				var id = task.id;
-				if(currentScope.envPlatform === 'docker' && mode === 'global'){
+				if (currentScope.envPlatform === 'docker' && mode === 'global') {
 					id = task.ref.node.id + "." + task.id;
 				}
 				name = task.name + "." + id;
 				dashboardID = "Metricbeat-Docker-task";
-				filter +="docker.container.name:"+ name;
+				filter += "docker.container.name:" + name;
 			}
 			else if (type) {
-				dashboardID = "Metricbeat-Docker-"+type;
-				filter +="docker.container.name:"+ serviceName + ".*";
+				dashboardID = "Metricbeat-Docker-" + type;
+				filter += "docker.container.name:" + serviceName + ".*";
 			}
 			else {
 				filter += "*";
@@ -1024,7 +1024,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 		else {
 			return currentScope.displayAlert('danger', "Invalid type provided!");
 		}
-		var url = "http://" + window.location.hostname + ":" + currentScope.kibanaPort + "/app/kibana#/dashboard/" + dashboardID + "?embed=true&_g=(refreshInterval%3A('%24%24hashKey'%3A'object%3A4602'%2Cdisplay%3A'10%20seconds'%2Cpause%3A!f%2Csection%3A1%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-15m%2Cmode%3Aquick%2Cto%3Anow))"+filter;
+		var url = "http://" + window.location.hostname + ":" + currentScope.kibanaPort + "/app/kibana#/dashboard/" + dashboardID + "?embed=true&_g=(refreshInterval%3A('%24%24hashKey'%3A'object%3A4602'%2Cdisplay%3A'10%20seconds'%2Cpause%3A!f%2Csection%3A1%2Cvalue%3A5000)%2Ctime%3A(from%3Anow-15m%2Cmode%3Aquick%2Cto%3Anow))" + filter;
 		$modal.open({
 			templateUrl: "metrics.html",
 			size: 'lg',
@@ -1041,7 +1041,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			}
 		});
 	}
-
+	
 	function getSettings(currentScope) {
 		var env = currentScope.envCode.toLowerCase();
 		if (currentScope.access.analytics.getSettings) {
@@ -1064,7 +1064,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			});
 		}
 	}
-
+	
 	function activateAnalytics(currentScope) {
 		var env = currentScope.envCode.toLowerCase();
 		var dataForm = angular.copy(environmentsConfig.form.localElastic);
@@ -1077,50 +1077,37 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 				}
 			}, function (error) {
 				if (error) {
-					if (error.code === 961){
-						var options = {
-							timeout: $timeout,
-							msgs: {
-								"header": translation.elasticSearchLocalMessage[LANG] + "?"
-							},
-							//es_analytics_cluster_a53511f0-def6-4b42-9a5a-fa6ddde47987
-							size: "dialog",
-							form: dataForm,
-							name: 'chooseLocal',
-							label: translation.deployLocalEs[LANG], // + ': ' + type,
-							actions: [
-								{
-									'type': 'submit',
-									'label': translation.deployLocalEs[LANG],
-									'btn': 'primary',
-									'action': function (formData) {
-										currentScope.modalInstance.close();
-										currentScope.$parent.displayAlert('info', "Local Elasticsearch is being deployed");
-										getSendDataFromServer(currentScope, ngDataApi, {
-											"method": "get",
-											"routeName": "/dashboard/analytics/activateAnalytics",
-											"params": {
-												"env": env,
-												"elasticsearch": "local"
-											}
-										}, function () {
-											currentScope.form.formData = {};
-										});
-										
-									}
-								},
-								{
-									'type': 'reset',
-									'label': translation.cancel[LANG],
-									'btn': 'danger',
-									'action': function () {
-										currentScope.modalInstance.dismiss('cancel');
-										currentScope.form.formData = {};
-									}
-								}
-							]
-						};
-						buildFormWithModal(currentScope, $modal, options);
+					if (error.code === 961) {
+						$modal.open({
+							templateUrl: "localElastic.html",
+							size: 'dialog',
+							backdrop: true,
+							keyboard: true,
+							controller: function ($scope, $modalInstance) {
+								$scope.title = translation.deployEs[LANG];
+								fixBackDrop();
+								$scope.close = function () {
+									$modalInstance.dismiss();
+								};
+								
+								$scope.deployEsLocally = function () {
+									$modalInstance.close();
+									currentScope.$parent.displayAlert('info', translation.localEsIsBeingDeployed[LANG]);
+									getSendDataFromServer(currentScope, ngDataApi, {
+										"method": "get",
+										"routeName": "/dashboard/analytics/activateAnalytics",
+										"params": {
+											"env": env,
+											"elasticsearch": "local"
+										}
+									}, function (error) {
+										if(error){
+											currentScope.$parent.displayAlert('danger', error);
+										}
+									});
+								};
+							}
+						});
 					}
 					else {
 						currentScope.displayAlert('danger', error);
@@ -1134,7 +1121,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			});
 		}
 	}
-
+	
 	function deactivateAnalytics(currentScope) {
 		var env = currentScope.envCode.toLowerCase();
 		if (currentScope.access.analytics.deactivate) {
@@ -1156,7 +1143,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 			});
 		}
 	}
-
+	
 	return {
 		'listServices': listServices,
 		'deleteService': deleteService,
@@ -1164,7 +1151,7 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 		'scaleService': scaleService,
 		'redeployService': redeployService,
 		'rebuildService': rebuildService,
-
+		
 		'executeHeartbeatTest': executeHeartbeatTest,
 		'hostLogs': hostLogs,
 		'reloadServiceRegistry': reloadServiceRegistry,
