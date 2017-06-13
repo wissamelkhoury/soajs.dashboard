@@ -514,7 +514,7 @@ describe("testing hosts deployment", function () {
 										"-c"
 									],
 									"args": [
-										"node index.js -T service"
+										"node helper.js -T service"
 									]
 								}
 							}
@@ -601,7 +601,7 @@ describe("testing hosts deployment", function () {
 										"-c"
 									],
 									"args": [
-										"node index.js -T nginx"
+										"node helper.js -T nginx"
 									]
 								}
 							}
@@ -719,7 +719,7 @@ describe("testing hosts deployment", function () {
 										"-c"
 									],
 									"args": [
-										"node index.js -T service"
+										"node helper.js -T service"
 									]
 								}
 							}
@@ -745,7 +745,7 @@ describe("testing hosts deployment", function () {
 					env: 'dev',
 					custom: {
 						type: 'service',
-						name: 'controller',
+						name: 'controller'
 					},
 					recipe: recipesInfo[0]._id.toString(),
 					gitSource: {
@@ -781,7 +781,7 @@ describe("testing hosts deployment", function () {
 					env: 'dev',
 					custom: {
 						type: 'nginx',
-						name: 'nginx',
+						name: 'nginx'
 					},
 					recipe: recipesInfo[1]._id.toString(),
 					deployConfig: {
@@ -1060,7 +1060,7 @@ describe("testing hosts deployment", function () {
 					env: 'dev'
 				}
 			};
-			
+
 			executeMyRequest(options, "cd/ledger", "get", function (body) {
 				assert.ok(body.result);
 				assert.ok(body.data);
@@ -1084,10 +1084,7 @@ describe("testing hosts deployment", function () {
 						}
 					}
 				};
-				
 				executeMyRequest(options, "cd/action", "put", function (body) {
-					assert.ok(body.result);
-					assert.ok(body.data);
 					done();
 				});
 			});
@@ -1113,8 +1110,6 @@ describe("testing hosts deployment", function () {
 				};
 
 				executeMyRequest(options, "cd/action", "put", function (body) {
-					assert.ok(body.result);
-					assert.ok(body.data);
 					done();
 				});
 			});

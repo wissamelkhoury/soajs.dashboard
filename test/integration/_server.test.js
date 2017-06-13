@@ -29,8 +29,8 @@ describe("importing sample data", function () {
 	it("update environment before starting service", function (done) {
 		var setDoc = {
 			"$set": {
-				"services.config.logger.level": "fatal",
-				"services.config.logger.formatter.outputMode": "short"
+				"services.config.logger.level": (process.env.SOAJS_DEBUG_LOGS) ? "debug" : "fatal",
+				"services.config.logger.formatter.outputMode": (process.env.SOAJS_DEBUG_LOGS) ? "long" : "short"
 			},
 			"$unset": {
 				"services.config.logger.src": ""
@@ -93,14 +93,14 @@ describe("importing sample data", function () {
 
 	after(function (done) {
 		setTimeout(function () {
-			require("./soajs.dashboard.test.swagger.js");
-			require("./soajs.contentbuilder.test.js");
-			require("./soajs.dashboard.locked.test.js");
-			require("./soajs.dashboard.test.tenants.js");
-			require("./soajs.dashboard.test.js");
-			require("./soajs.dashboard.test.services.js");
-			require("./soajs.uploadCertificate.test.js");
-			require("./soajs.catalog.test.js");
+            require("./soajs.dashboard.test.swagger.js");
+            require("./soajs.contentbuilder.test.js");
+            require("./soajs.dashboard.locked.test.js");
+            require("./soajs.dashboard.test.tenants.js");
+            require("./soajs.dashboard.test.js");
+            require("./soajs.dashboard.test.services.js");
+            require("./soajs.uploadCertificate.test.js");
+            require("./soajs.catalog.test.js");
             require("./soajs.hostsdeploy.test.js");
             require("./soajs.cd.test.js");
             require("./soajs.dashboard.test.gitAccounts.js");

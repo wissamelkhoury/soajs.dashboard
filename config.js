@@ -80,12 +80,20 @@ module.exports = {
                 domain: 'https://bitbucket.org/site/oauth2/access_token'
             },
             repoConfigsFolder: __dirname + '/repoConfigs',
-            defaultConfigFilePath: "config.js"
+            defaultConfigFilePath: "config.js",
+            customConfigFilesPath: {
+                "soajsFile": "soa.js",
+                "swaggerFile": "swagger.yml"
+            }
         },
         "bitbucket_enterprise": {
             userAgent: "SOAJS Bitbucket App",
             defaultConfigFilePath: "config.js",
             repoConfigsFolder: __dirname + '/repoConfigs',
+            customConfigFilesPath: {
+                "soajsFile": "soa.js",
+                "swaggerFile": "swagger.yml"
+            },
             // required for OAuth
             apiDomain: '%PROVIDER_DOMAIN%/rest/api/1.0',
             downloadUrl: '%PROVIDER_DOMAIN%/projects/%PROJECT_NAME%/repos/%REPO_NAME%/browse/%PATH%?at=%BRANCH%&raw'
@@ -104,6 +112,10 @@ module.exports = {
             },
             "tokenScope": ["repo", "admin:repo_hook"],
             "defaultConfigFilePath": "config.js",
+            "customConfigFilesPath": {
+                "soajsFile": "soa.js",
+                "swaggerFile": "swagger.yml"
+            },
             "repoConfigsFolder": __dirname + '/repoConfigs'
         }
     },
@@ -339,6 +351,35 @@ module.exports = {
                 "required": true,
                 "validation": {"type": "boolean"}
             },
+
+            "urac": {
+                "required": true,
+                "source": ["body.urac"],
+                "validation": {
+                    "type": "boolean"
+                }
+            },
+            "urac_Profile": {
+                "required": true,
+                "source": ["body.urac_Profile"],
+                "validation": {
+                    "type": "boolean"
+                }
+            },
+            "urac_ACL": {
+                "required": true,
+                "source": ["body.urac_ACL"],
+                "validation": {
+                    "type": "boolean"
+                }
+            },
+            "provision_ACL": {
+                "required": true,
+                "source": ["body.provision_ACL"],
+                "validation": {
+                    "type": "boolean"
+                }
+            },
             "requestTimeout": {
                 "source": ['body.requestTimeout'],
                 "required": true,
@@ -365,13 +406,6 @@ module.exports = {
                             "groupMain": {"type": "boolean", "required": false}
                         }
                     }
-                }
-            },
-            "awareness": {
-                "required": true,
-                "source": ["body.awareness"],
-                "validation": {
-                    "type": "boolean"
                 }
             },
 
@@ -855,21 +889,6 @@ module.exports = {
                 'commonFields': ['id', 'jobName']
             },
 
-            "/staticContent/list": {
-                _apiInfo: {
-                    "l": "List Static Content",
-                    "group": "Static Content"
-                },
-                'staticContentNames': {
-                    'source': ['body.staticContentNames'],
-                    'required': false,
-                    'validation': {
-                        'type': 'array',
-                        'items': {'type': 'string'}
-                    }
-                }
-            },
-
             "/hosts/list": {
                 _apiInfo: {
                     "l": "List Hosts",
@@ -1009,7 +1028,14 @@ module.exports = {
                     'validation':{
                         'type': 'number'
                     }
-                }
+                },
+	            'list':{
+		            'source': ['query.list'],
+		            'required': false,
+		            'validation':{
+			            'type': 'boolean'
+		            }
+	            }
             },
 
             "/ci/download": {
@@ -1314,6 +1340,13 @@ module.exports = {
                 _apiInfo: {
                     "l": "List Services",
                     "group": "Services"
+                },
+                'includeEnvs': {
+                    'source': ['query.includeEnvs'],
+                    'required': false,
+                    'validation': {
+                        'type': 'boolean'
+                    }
                 },
                 'serviceNames': {
                     'source': ['body.serviceNames'],
@@ -1893,14 +1926,13 @@ module.exports = {
                     "required": false,
                     "validation": {
                         "type": "object",
+	                    "properties":{
+                        	"pause":{"type":"boolean", "required": false}
+	                    },
                         "patternProperties": {
                             "^[a-zA-Z]{3,}$": {
                                 "type":"object",
                                 "required": true,
-                                "properties":{
-                                    "branch": {"type": "string", "required": true}, //{ "DEV": { "branch": "develop" } }
-                                    "strategy": {"type": "string", "enum": ["notify", "update"], "required": true}
-                                },
                                 "additionalProperties": { //pattern to match a service/daemon name { "DEV": { "branch": "develop", "urac": { "branch": "master" } } }
                                     "^[a-z0-9]+$": {
                                         "type": "object",
@@ -2275,6 +2307,41 @@ module.exports = {
         },
 
         "put": {
+            "/services/settings/update": {
+                "_apiInfo": {
+                    "l": "Updates Service Settings",
+                    "group": "Services"
+                },
+                "id": {
+                    "source": ['query.id'],
+                    "required": true,
+                    "validation": {
+                        "type": "string"
+                    }
+                },
+                "env": {
+                    "source": ['body.env'],
+                    "required": true,
+                    "validation": {
+                        "type": "string"
+                    }
+                },
+                "version": {
+                    "source": ['body.version'],
+                    "required": true,
+                    "validation": {
+                        "type": "string"
+                    }
+                },
+                "settings": {
+                    "source": ['body.settings'],
+                    "required": true,
+                    "validation": {
+                        "type": "object"
+                    }
+                }
+            },
+
             "/cd/ledger/read":{
                 "_apiInfo": {
                     "l": "Mark as read",

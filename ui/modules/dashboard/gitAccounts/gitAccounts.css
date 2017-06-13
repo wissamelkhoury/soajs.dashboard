@@ -1,7 +1,15 @@
 .customEntryBox {
-    width: 48% !important;
-    height: 196px !important;
+    width: 100% !important;
+    /*min-height: 196px !important;*/
+    /*height: auto;*/
     padding-left: 0px !important;
+}
+
+.entryBox{
+    border: solid 1px #cccccc;
+    position: relative;
+    border-radius: 8px;
+    margin-bottom: 15px;
 }
 
 .blueLi.active {
@@ -77,4 +85,116 @@ li.accountType {
 
 .mr11 {
     margin-right: 11% !important;
+}
+
+#repoSettings #maximum_number_of_builds-wrapper label,
+#repoSettings #builds_only_with_travis_yml-wrapper label,
+#repoSettings #build_pushes-wrapper label,
+#repoSettings #build_pull_requests-wrapper label {
+    width:255px;
+}
+
+#repoSettings #maximum_number_of_builds-wrapper label,
+#repoSettings #builds_only_with_travis_yml-wrapper label,
+#repoSettings #builds_only_with_travis_yml-wrapper ul,
+#repoSettings #builds_only_with_travis_yml-wrapper ul li,
+#repoSettings #build_pushes-wrapper label,
+#repoSettings #build_pushes-wrapper ul,
+#repoSettings #build_pushes-wrapper ul li,
+#repoSettings #build_pull_requests-wrapper label,
+#repoSettings #build_pull_requests-wrapper ul,
+#repoSettings #build_pull_requests-wrapper ul li{
+    float:left;
+}
+
+#repoSettings #builds_only_with_travis_yml-wrapper ul,
+#repoSettings #build_pushes-wrapper ul,
+#repoSettings #build_pull_requests-wrapper ul{
+    margin-top: 15px;
+    list-style-type:none;
+}
+
+#repoSettings #maximum_number_of_builds-wrapper input,
+#repoSettings #builds_only_with_travis_yml-wrapper ul li,
+#repoSettings #build_pushes-wrapper ul li,
+#repoSettings #build_pull_requests-wrapper ul li{
+    margin-left:10px;
+}
+
+#repoSettings #maximum_number_of_builds-wrapper input{
+    float:left;
+    width:50px;
+    margin-left: 46px;
+}
+
+#repoSettings #envs tr[class^="form-group tr-envName"] {
+    width: 35%;
+    float:left;
+}
+
+#repoSettings #envs tr[class^="form-group tr-envVal"] {
+    width: 60%;
+    float:left;
+}
+
+#repoSettings #envs tr[class^="form-group tr-removeEnv"] {
+    width: 5%;
+    float:left;
+}
+
+#repoSettings #envs tr td{
+    display:block;
+    width:95%;
+}
+
+#repoSettings #envs tr[class^="form-group tr-removeEnv"] td{
+    padding-top:45px;
+}
+
+
+.configCd .entryServiceBoxes .service-container .serviceNameHead{
+    background-color: white;
+    border-bottom: none;
+}
+.configCd .serviceNameHead .serviceName{
+    width: 30%;
+}
+.configCd .form-control {
+    display: inline;
+    width: auto;
+    height: auto;
+    padding-bottom: 3px;
+    padding-top: 4px;
+}
+
+.configCd .entryServiceBoxes {
+    margin-top: 10px;
+}
+
+.configCd label,
+.configCd .entryServiceBoxes .service-container label {
+    font-weight: bold;
+    padding-bottom: 2px;
+}
+
+.configCd select.form-control {
+    margin-top: 3px;
+    margin-bottom: 5px;
+    min-width: 120px;
+}
+
+.configCd .halfPage {
+    float: left;
+    width: 35%;
+}
+.configCd .branchLabel{
+    padding-top: 8px;
+}
+
+.font-16{
+    font-size:16px;
+}
+
+.font-14{
+    font-size:14px;
 }
