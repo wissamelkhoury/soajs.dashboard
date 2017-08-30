@@ -246,24 +246,23 @@ hacloudServices.service('hacloudSrv', ['ngDataApi', '$timeout', '$modal', '$sce'
 		if(currentScope.envPlatform !== 'kubernetes') {
 			if(cb) return cb();
 		}
-		else{
-			getSendDataFromServer(currentScope, ngDataApi, {
-				method: 'get',
-				routeName: '/dashboard/cloud/heapster',
-				params: {
-					"env": currentScope.envCode
-				}
-			}, function (error, response) {
-				if (error) {
-					currentScope.displayAlert('danger', error.message);
-				}
-				else {
-					currentScope.isHeapsterDeployed = response.deployed;
-					currentScope.isAutoScalable = currentScope.isHeapsterDeployed;
-					if(cb) return cb();
-				}
-			});
-		}
+
+		getSendDataFromServer(currentScope, ngDataApi, {
+			method: 'get',
+			routeName: '/dashboard/cloud/heapster',
+			params: {
+				"env": currentScope.envCode
+			}
+		}, function (error, response) {
+			if (error) {
+				currentScope.displayAlert('danger', error.message);
+			}
+			else {
+				currentScope.isHeapsterDeployed = response.deployed;
+				currentScope.isAutoScalable = currentScope.isHeapsterDeployed;
+				if(cb) return cb();
+			}
+		});
 	}
 
 	/**
